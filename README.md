@@ -40,16 +40,21 @@ package exists to prevent, and it has a test named after it.
 
 ```swift
 let stripe = PaymentRail.alternativeInApp(processor: "Stripe")
+let day: TimeInterval = 86_400
+let boughtOn = ISO8601DateFormatter().date(from: "2026-10-01T00:00:00Z") ?? .now
+
 var ledger = EntitlementLedger(policy: .subscription)
-
 ledger.ingest(ReceiptEvent(id: "apple-1", rail: .appleIAP, productID: "pro.annual",
-                           kind: .purchase, effectiveAt: boughtOn, expiresAt: oneYearOut))
+                           kind: .purchase, effectiveAt: boughtOn,
+                           expiresAt: boughtOn.addingTimeInterval(365 * day)))
 ledger.ingest(ReceiptEvent(id: "psp-1", rail: stripe, productID: "pro.annual",
-                           kind: .purchase, effectiveAt: boughtOn, expiresAt: oneYearOut))
+                           kind: .purchase, effectiveAt: boughtOn.addingTimeInterval(31 * day),
+                           expiresAt: boughtOn.addingTimeInterval(396 * day)))
 ledger.ingest(ReceiptEvent(id: "psp-refund", rail: stripe, productID: "pro.annual",
-                           kind: .refund, effectiveAt: refundedOn))
+                           kind: .refund, effectiveAt: boughtOn.addingTimeInterval(44 * day)))
 
-ledger.verdict(for: "pro.annual", at: .now).rail   // .appleIAP — still entitled
+ledger.verdict(for: "pro.annual", at: boughtOn.addingTimeInterval(50 * day)).rail
+// .appleIAP — the processor's refund closed only the processor's grant
 ```
 
 **The verdict does not depend on delivery order.** Webhooks arrive late, out of order
@@ -72,12 +77,14 @@ ledger.dualRailGrants(at: .now)
 Apple: *"you must maintain that choice across all EU storefronts for 12 months."*
 
 ```swift
+let iso = ISO8601DateFormatter()
 let commitment = PaymentOptionCommitment(
     selection: [.appleIAP, .alternativeInApp],
-    committedOn: octoberFirst2026
+    committedOn: iso.date(from: "2026-10-01T00:00:00Z") ?? .now
 )
-commitment.evaluate(changeTo: [.appleIAP], on: march2027)
-// .locked(until: 2027-10-01, daysRemaining: 214)
+commitment.evaluate(changeTo: [.appleIAP],
+                    on: iso.date(from: "2027-03-01T00:00:00Z") ?? .now)
+// .locked(until: 2027-10-01 00:00:00 +0000, daysRemaining: 214)
 ```
 
 `PaymentOptionCommitment` takes the conservative reading — *any* delta to the mix is a
