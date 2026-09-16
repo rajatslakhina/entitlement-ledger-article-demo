@@ -150,7 +150,7 @@ Every rule encoded here traces to Apple's own page, not to a summary of it:
 [Payment options on the App Store in the EU](https://developer.apple.com/support/payment-options-on-the-app-store-in-the-eu)
 and [Changes for apps in the European Union](https://developer.apple.com/news/?id=gmws0jgp) (18 August 2026).
 
-Article: (added after publish)
+Article: [Apple Lets a Second Payment Rail Into Your EU App on 1 October](https://medium.com/@er.rajatlakhina/apple-lets-a-second-payment-rail-into-your-eu-app-on-1-october-ad4e0162792c)
 
 ## Licence
 
