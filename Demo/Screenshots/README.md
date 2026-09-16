@@ -10,7 +10,7 @@ demos stops rather than clicking through someone else's workspace.
 What that means for the code in this repo:
 
 - `Sources/EntitlementLedger/*` other than `LedgerDemoView.swift` — compiled and
-  tested (51 tests, 0 failures, Swift 6.0.3).
+  tested (52 tests, 0 failures, Swift 6.0.3).
 - `Sources/EntitlementLedger/LedgerDemoView.swift` — behind `#if canImport(SwiftUI)`,
   so it compiles to nothing on Linux. Hand-reviewed, never executed.
 - `Demo/DemoApp.swift` and `Demo.xcodeproj` — structurally validated, never built.
