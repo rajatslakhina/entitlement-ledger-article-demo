@@ -127,7 +127,7 @@ public struct ReconciliationPolicy: Hashable, Sendable {
 
     /// How long after a grant's expiry access is still served.
     ///
-    /// This is not generosity, it is a availability decision. An alternative rail's
+    /// This is not generosity, it is an availability decision. An alternative rail's
     /// renewal webhook can be late for reasons that have nothing to do with the
     /// customer, and Apple will not be answering their support email.
     public let gracePeriod: TimeInterval
